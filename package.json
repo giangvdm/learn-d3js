@@ -1,0 +1,22 @@
+{
+  "name": "d3js",
+  "version": "1.0.0",
+  "description": "Learning D3.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "keywords": [
+    "d3",
+    "js"
+  ],
+  "author": "giangvdm",
+  "license": "ISC",
+  "devDependencies": {
+    "d3": "^6.6.0",
+    "webpack": "^5.26.2",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
+  }
+}
