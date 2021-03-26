@@ -578,3 +578,68 @@ csv('./data/world-pop-by-year-2015.csv').then(data => {
     renderAreaChart(data)
 });
 /** End AREA CHART */
+
+/** WORLD MAP */
+import {
+    json,
+    tsv,
+    geoPath,
+    geoNaturalEarth1,
+    zoom,
+    transform
+} from 'd3'
+import { feature } from 'topojson-client'
+
+// Load multiple data files
+Promise.all([
+    tsv('https://unpkg.com/world-atlas@1.1.4/world/110m.tsv'),
+    json('https://unpkg.com/world-atlas@1.1.4/world/110m.json')
+]).then(([tsvData, topoJSONData]) => {
+    /** Use this, or use reduce() better */
+    // const countryName = {}
+    // tsvData.forEach(d => {
+    //     countryName[d.iso_n3] = d.name
+    // })
+    const countryName = tsvData.reduce((accumulator, d) => {
+        accumulator[d.iso_n3] = d.name
+        return accumulator
+    }, {})
+
+    const countries = feature(topoJSONData, topoJSONData.objects.countries)
+    const projection = geoNaturalEarth1()
+        // where to center the map in degrees
+        .center([0, 100])
+        // zoomlevel
+        .scale(2000)
+        // map-rotation
+        .rotate([0,0]);
+    const pathGenerator = geoPath().projection(projection)
+    
+    const svg = select('#world-map')
+
+    const width = svg.attr('width'), height = svg.attr('height')
+
+    const g = svg.append('g')
+    
+    g.append('path')
+        .attr('class', 'sphere')
+        .attr('d', pathGenerator({type: 'Sphere'}))
+
+    svg.call(zoom()
+        .extent([[0, 0], [width, height]])
+        // .scaleExtent([1, 8])
+        .on('zoom', ({transform}) => {
+            console.log(transform)
+            g.attr('transform', transform)
+        })
+    )
+    
+    g.selectAll('path')
+        .data(countries.features)
+        .enter().append('path')
+            .attr('class', 'country')
+            .attr('d', d => pathGenerator(d))
+        .append('title')
+            .text(d => countryName[d.id])
+})
+/** End WORLD MAP */

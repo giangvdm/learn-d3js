@@ -9,3 +9,17 @@ text {
 .tick line {
     stroke: #C0C0BB;
 }
+
+.sphere {
+    fill: #2F496E;
+}
+
+.country {
+    fill: #6AB187;
+    stroke: #000;
+    stroke-width: 0.15px;
+}
+
+.country:hover {
+    fill: #FF4447;
+}
