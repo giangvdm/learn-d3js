@@ -1,6 +1,6 @@
 # Learn D3.js
 
-## with Curran Kelleher
+## with Curran Kelleher (and more)
 
 (This is a repository created by a learner, not Curran himself)
 
