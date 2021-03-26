@@ -1,0 +1,16 @@
+#viz {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.tooltip {
+    position: absolute;
+    padding: 10px;
+    font-size: 12px;
+    background: #000;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    color: #FFF;
+}
