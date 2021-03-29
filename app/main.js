@@ -468,9 +468,9 @@ Promise.all([
     const countries = feature(topoJSONData, topoJSONData.objects.countries)
     const projection = geoNaturalEarth1()
         // where to center the map in degrees
-        .center([0, 100])
+        .center([-30, 15])
         // zoomlevel
-        .scale(2000)
+        .scale(200)
         // map-rotation
         .rotate([0,0]);
     const pathGenerator = geoPath().projection(projection)
