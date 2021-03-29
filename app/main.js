@@ -489,7 +489,6 @@ Promise.all([
         .extent([[0, 0], [width, height]])
         // .scaleExtent([1, 8])
         .on('zoom', ({transform}) => {
-            console.log(transform)
             g.attr('transform', transform)
         })
     )
@@ -503,3 +502,51 @@ Promise.all([
             .text(d => countryName[d.id])
 })
 /** End WORLD MAP */
+
+/** TREE VIZ */
+import { tree, hierarchy, linkHorizontal } from 'd3'
+
+json('./data/world-countries.json').then(data => {
+    const svg = select('#tree-viz')
+
+    // const w = svg.node().getBoundingClientRect().width,
+    //     h = svg.node().getBoundingClientRect().height
+    const w = 1600, h = 800
+    const margin = {top: 0, right: 50, bottom: 0, left: 75}
+    const innerWidth = w - margin.left - margin.right,
+        innerHeight = h - margin.top - margin.bottom
+
+    const countryTree = tree()
+        .size([innerHeight, innerWidth])
+
+    const zoomG = svg.append('g')
+
+    const g = zoomG.append('g')
+        .attr('transform', `translate(${margin.left}, ${margin.top})`)
+
+    svg.call(zoom()
+        .on('zoom', ({transform}) => {
+            zoomG.attr('transform', transform)
+        })
+    )
+
+    const root = hierarchy(data)
+    const links = countryTree(root).links()
+    const linkPathGenerator = linkHorizontal()
+        .x(d => d.y)
+        .y(d => d.x)
+
+    g.selectAll('path').data(links)
+        .enter().append('path')
+        .attr('d', linkPathGenerator)
+
+    g.selectAll('text').data(root.descendants())
+        .enter().append('text')
+        .attr('x', d => d.y)
+        .attr('y', d => d.x)
+        .attr('dy', '0.32em')
+        .attr('text-anchor', d => d.children ? 'middle' : 'start')
+        .attr('font-size', d => 3.25 - d.depth + 'em')
+        .text(d => d.data.data.id)
+})
+/** End TREE VIZ */

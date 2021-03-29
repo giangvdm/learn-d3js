@@ -2,24 +2,38 @@ text {
     font-family: sans-serif;
 }
 
-.tick text {
+/* .tick text {
     fill: #635F5D;
 }
 
 .tick line {
     stroke: #C0C0BB;
-}
+} */
 
-.sphere {
+#world-map .sphere {
     fill: #2F496E;
 }
 
-.country {
+#world-map .country {
     fill: #6AB187;
     stroke: #000;
     stroke-width: 0.15px;
 }
 
-.country:hover {
+#world-map .country:hover {
     fill: #FF4447;
+}
+
+#tree-viz path {
+    fill: none;
+    stroke: steelblue;
+}
+
+#tree-viz text {
+    text-shadow: 
+        -1px -1px 3px #FFF,
+        -1px  1px 3px #FFF,
+        -1px -1px 3px #FFF,
+        01px  1px 3px #FFF;
+    pointer-events: none;
 }
