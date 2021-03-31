@@ -1,4 +1,4 @@
-import { select, arc } from 'd3';
+import { select, arc, schemeCategory10, schemeSpectral } from 'd3';
 
 /** SMILING FACE */
 const smilingFaceSvg = select('#smiling-face');
@@ -550,3 +550,63 @@ json('./data/world-countries.json').then(data => {
         .text(d => d.data.data.id)
 })
 /** End TREE VIZ */
+
+/** CHOROPLETH MAP */
+import { scaleOrdinal } from 'd3'
+import { loadAndProcessData } from './loadAndProcessData'
+import { colorLegend } from './colorLegend'
+
+loadAndProcessData().then(countries => {
+    const projection = geoNaturalEarth1()
+        .center([-30, 15])
+        .scale(200)
+        .rotate([0,0]);
+    const pathGenerator = geoPath().projection(projection)
+    
+    const svg = select('#choropleth-map')
+
+    const width = svg.attr('width'), height = svg.attr('height')
+
+    const g = svg.append('g'),
+        colorLegendG = svg.append('g')
+            .attr('class', 'color-legend')
+
+    const colorValue = d => d.properties.economy
+
+    const colorScale = scaleOrdinal()
+        .domain(countries.features.map(colorValue).sort().reverse())
+    colorScale
+        .range(schemeSpectral[colorScale.domain().length])
+
+    colorLegendG
+        .attr('transform', 'translate(50, 350)')
+        .call(colorLegend, {
+            colorScale,
+            circleRadius: 10,
+            spacing: 30,
+            textOffset: 20,
+            backgroundRectWidth: 280
+        }
+    )
+    
+    g.append('path')
+        .attr('class', 'sphere')
+        .attr('d', pathGenerator({type: 'Sphere'}))
+
+    svg.call(zoom()
+        .extent([[0, 0], [width, height]])
+        .on('zoom', ({transform}) => {
+            g.attr('transform', transform)
+        })
+    )
+    
+    g.selectAll('path')
+        .data(countries.features)
+        .enter().append('path')
+            .attr('class', 'country')
+            .attr('d', d => pathGenerator(d))
+            .style('fill', d => colorScale(d.properties.economy))
+        .append('title')
+            .text(d => d.properties.name + " -- " + colorValue(d))
+})
+/** End CHOROPLETH MAP */

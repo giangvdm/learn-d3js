@@ -10,7 +10,8 @@ text {
     stroke: #C0C0BB;
 } */
 
-#world-map .sphere {
+#world-map .sphere,
+#choropleth-map .sphere {
     fill: #2F496E;
 }
 
@@ -20,8 +21,17 @@ text {
     stroke-width: 0.15px;
 }
 
+#choropleth-map .country {
+    stroke: #000;
+    stroke-width: 0.15px;
+}
+
 #world-map .country:hover {
     fill: #FF4447;
+}
+
+#choropleth-map .country:hover {
+    opacity: .8;
 }
 
 #tree-viz path {
@@ -36,4 +46,13 @@ text {
         -1px -1px 3px #FFF,
         01px  1px 3px #FFF;
     pointer-events: none;
+}
+
+.color-legend {
+    opacity: 0.8;
+    background-color: #FFF;
+}
+
+.color-legend circle {
+    stroke: #000;
 }
